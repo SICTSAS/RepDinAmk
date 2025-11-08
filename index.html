@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat a n8n</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        h1 { color: #333; text-align: center; }
+        textarea { width: 98%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+        button:hover { background-color: #0056b3; }
+        #respuesta { margin-top: 15px; padding: 10px; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>馃 Chat de Solicitud de Datos</h1>
+    <p>Escribe tu petici贸n en lenguaje natural. El mensaje se enviar谩 a un flujo de n8n.</p>
+    
+    <textarea id="userInput" placeholder="Ejemplo: Necesito el reporte de ventas de la regi贸n sur de este mes." rows="5"></textarea>
+    <button onclick="enviarAn8n()">Enviar Petici贸n</button>
+    
+    <div id="respuesta">Esperando tu mensaje...</div>
+
+    <script>
+        // 鈿狅笍 IMPORTANTE: Deber谩s reemplazar 'URL_DE_TU_WEBHOOK_N8N' por la URL real de tu nodo Webhook cuando lo configures.
+        const webhookURL = 'https://repodinamik.up.railway.app/webhook/RepDinAmk'; 
+
+        function enviarAn8n() {
+            const peticion = document.getElementById('userInput').value.trim();
+            const respuestaElement = document.getElementById('respuesta');
+
+            if (peticion === "") {
+                respuestaElement.textContent = "Por favor, escribe una petici贸n.";
+                return;
+            }
+            
+            respuestaElement.textContent = "Enviando...";
+
+            // Uso de fetch para enviar la petici贸n v铆a POST
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    // Esta es la clave que usar谩s en n8n: $json.body.peticionUsuario
+                    peticionUsuario: peticion 
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    respuestaElement.textContent = '鉁?Petici贸n enviada correctamente. 隆Revisa tu flujo de n8n!';
+                    document.getElementById('userInput').value = ''; 
+                } else {
+                    respuestaElement.textContent = `鉂?Error al enviar la petici贸n. C贸digo de respuesta: ${response.status}. Aseg煤rate que la URL es correcta.`;
+                }
+            })
+            .catch(error => {
+                respuestaElement.textContent = '鉂?Error de conexi贸n. Revisa si el Webhook est谩 activo y la URL es accesible.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
