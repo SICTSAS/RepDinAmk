@@ -14,16 +14,16 @@
     </style>
 </head>
 <body>
-    <h1>ðŸ¤– Chat de Solicitud de Datos</h1>
-    <p>Escribe tu peticiÃ³n en lenguaje natural. El mensaje se enviarÃ¡ a un flujo de n8n.</p>
+    <h1>Chat de Solicitud de Datos</h1>
+    <p>Escribe tu peticion en lenguaje natural. El mensaje se enviara¡ a un flujo de n8n.</p>
     
-    <textarea id="userInput" placeholder="Ejemplo: Necesito el reporte de ventas de la regiÃ³n sur de este mes." rows="5"></textarea>
-    <button onclick="enviarAn8n()">Enviar PeticiÃ³n</button>
+    <textarea id="userInput" placeholder="Ejemplo: Necesito el reporte de ventas de la region sur de este mes." rows="5"></textarea>
+    <button onclick="enviarAn8n()">Enviar Peticion</button>
     
     <div id="respuesta">Esperando tu mensaje...</div>
 
     <script>
-        // âš ï¸ IMPORTANTE: DeberÃ¡s reemplazar 'URL_DE_TU_WEBHOOK_N8N' por la URL real de tu nodo Webhook cuando lo configures.
+        // IMPORTANTE: Deberas reemplazar 'URL_DE_TU_WEBHOOK_N8N' por la URL real de tu nodo Webhook cuando lo configures.
         //const webhookURL = 'https://repodinamik.up.railway.app/webhook/RepDinAmk';                              
         const webhookURL = 'https://repodinamk.up.railway.app/webhook-test/RepDinAmk'
 
@@ -32,13 +32,13 @@
             const respuestaElement = document.getElementById('respuesta');
 
             if (peticion === "") {
-                respuestaElement.textContent = "Por favor, escribe una peticiÃ³n.";
+                respuestaElement.textContent = "Por favor, escribe una peticion.";
                 return;
             }
             
             respuestaElement.textContent = "Enviando...";
 
-            // Uso de fetch para enviar la peticiÃ³n vÃ­a POST
+            // Uso de fetch para enviar la peticion via POST
             fetch(webhookURL, {
                 method: 'POST',
                 headers: {
@@ -51,19 +51,17 @@
             })
             .then(response => {
                 if (response.ok) {
-                    respuestaElement.textContent = 'âœ?PeticiÃ³n enviada correctamente. Â¡Revisa tu flujo de n8n!';
+                    respuestaElement.textContent = 'Peticion enviada correctamente. Revisa tu flujo de n8n!';
                     document.getElementById('userInput').value = ''; 
                 } else {
-                    respuestaElement.textContent = `â?Error al enviar la peticiÃ³n. CÃ³digo de respuesta: ${response.status}. AsegÃºrate que la URL es correcta.`;
+                    respuestaElement.textContent = `Error al enviar la peticion. Codigo de respuesta: ${response.status}. Asegurate que la URL es correcta.`;
                 }
             })
             .catch(error => {
-                respuestaElement.textContent = 'â?Error de conexiÃ³n. Revisa si el Webhook estÃ¡ activo y la URL es accesible.';
+                respuestaElement.textContent = 'Error de conexion. Revisa si el Webhook esta¡ activo y la URL es accesible.';
                 console.error('Error:', error);
             });
         }
     </script>
 </body>
-
 </html>
-
