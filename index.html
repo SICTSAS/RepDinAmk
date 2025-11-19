@@ -30,8 +30,26 @@
     <h1>Reporteador Dinamico AURA - AMERIKA_IA</h1>
     <p>Escribe tu peticion en lenguaje natural, para proceso de Facturación del Sistema Amerika.</p>
     
-    <textarea id="userInput" placeholder="Ejemplo: Necesito saber el total facturado en el periodo de Octubre del 2025." rows="5"></textarea>
-    <button onclick="enviarAn8n()">Enviar Peticion</button>
+<style>
+    #userInput {
+        width: 100%;            /* Ocupa todo el ancho disponible */
+        max-width: 820px;       /* Fija un ancho máximo */
+        height: 120px;          /* Mantiene la altura del textarea */
+        resize: none;           /* Impide que el usuario cambie el tamaño */
+        padding: 12px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        display: block;
+        margin-bottom: 15px;
+    }
+</style>
+
+<textarea id="userInput"
+    placeholder="Ejemplo: Necesito saber el total facturado en el periodo de Octubre del 2025."
+    rows="5">
+</textarea>
+<button onclick="enviarAn8n()">Enviar Peticion</button>
     
     <div id="respuesta">Esperando tu mensaje...</div>
 
@@ -78,4 +96,5 @@
     </script>
 </body>
 </html>
+
 
