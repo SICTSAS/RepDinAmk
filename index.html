@@ -2,18 +2,31 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat a n8n</title>
+    <title>AMERIKA-IA</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        h1 { color: #333; text-align: center; }
-        textarea { width: 98%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; }
-        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
-        button:hover { background-color: #0056b3; }
-        #respuesta { margin-top: 15px; padding: 10px; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 4px; }
+        body { background-color: #f2f2f2; font-family: Arial, sans-serif; padding: 30px; }
+        .banner { text-align: center; }
+        .banner img { width: 100%; }
+        .container { max-width: 850px; margin: 0 auto; background: #fff; border-radius: 8px; padding: 25px 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; }
+        label { font-weight: bold; }
+        input[type="text"], input[type="date"] { width: 80%; padding: 10px; margin-top: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #0077cc; color: white; border: none; padding: 10px 20px; border-radius: 4px; margin-right: 10px; cursor: pointer; }
+        button:hover { background-color: #005fa3; }
+        #respuesta { margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        img.grafica { max-width: 100%; margin-top: 15px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
+
+    <div class="banner">
+        <img src="https://soporte.amerikatis.co/img/Banner_AMERIKA.png" alt="Banner AMERIKATIS">
+    </div>
+	
     <h1>Chat de Solicitud de Datos</h1>
     <p>Escribe tu peticion en lenguaje natural. El mensaje se enviara¡ a un flujo de n8n.</p>
     
