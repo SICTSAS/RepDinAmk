@@ -1,76 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Reporteador Dinámico AURA - AMERIKA_IA</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-    header { background-color: #003366; color: white; text-align: center; padding: 20px; font-size: 24px; font-weight: bold; }
-    main { max-width: 800px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h1 { color: #003366; }
-    input, button { padding: 10px; margin-top: 10px; width: 100%; font-size: 16px; }
-    button { background-color: #003366; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #0055aa; }
-    #resultado { margin-top: 20px; font-weight: bold; color: #333; }
-    #sqlPreview { margin-top: 10px; font-style: italic; color: #555; }
-  </style>
+    <meta charset="UTF-8">
+    <title>AMERIKA-IA</title>
+    <style>
+        body { background-color: #f2f2f2; font-family: Arial, sans-serif; padding: 30px; }
+        .banner { text-align: center; }
+        .banner img { width: 100%; }
+        .container { max-width: 850px; margin: 0 auto; background: #fff; border-radius: 8px; padding: 25px 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; }
+        label { font-weight: bold; }
+        input[type="text"] { width: 80%; padding: 10px; margin-top: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #0077cc; color: white; border: none; padding: 10px 20px; border-radius: 4px; margin-right: 10px; cursor: pointer; }
+        button:hover { background-color: #005fa3; }
+        #respuesta { margin-top: 20px; font-weight: bold; }
+        #sqlPreview { margin-top: 10px; font-style: italic; color: #555; }
+    </style>
 </head>
 <body>
-  <header>
-    AMERIKA IA - Reporteador Dinámico AURA
-  </header>
-  <main>
-    <h1>Genera tu reporte</h1>
-    <p>Escribe tu petición en lenguaje natural para proceso de Facturación:</p>
-    <input type="text" id="inputTexto" placeholder="Ej: Total facturado en octubre por zona 02">
-    <button onclick="enviarPeticion()">Enviar Petición</button>
-    <div id="resultado">Esperando tu mensaje...</div>
-    <div id="sqlPreview"></div>
-  </main>
+    <div class="banner">
+        banner-amerika.png
+    </div>
+    <div class="container">
+        <h2>Reporteador Dinámico AURA - AMERIKA_IA</h2>
+        <p>Escribe tu petición en lenguaje natural para proceso de Facturación:</p>
+        <input type="text" id="inputTexto" placeholder="Ej: Total facturado en octubre por zona 02">
+        <br>
+        <button onclick="enviarPeticion()">Enviar Petición</button>
+        <div id="respuesta">Esperando tu mensaje...</div>
+        <div id="sqlPreview"></div>
+    </div>
 
-  <script>
-    async function enviarPeticion() {
-      const peticionUsuario = document.getElementById('inputTexto').value;
-      const resultadoDiv = document.getElementById('resultado');
-      const sqlDiv = document.getElementById('sqlPreview');
-      resultadoDiv.innerText = "Procesando...";
-      sqlDiv.innerText = "";
+    <script>
+        async function enviarPeticion() {
+            const peticionUsuario = document.getElementById('inputTexto').value;
+            const respuestaDiv = document.getElementById('respuesta');
+            const sqlDiv = document.getElementById('sqlPreview');
+            respuestaDiv.innerText = "Procesando...";
+            sqlDiv.innerText = "";
 
-      try {
-        const response = await fetch('https://repodinamk.up.railway.app/webhook-test/RepDin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ peticionUsuario })
-        });
+            try {
+                const response = await fetch('https://repodinamk.up.railway.app/webhook-test/RepDin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ peticionUsuario })
+                });
 
-        const contentType = response.headers.get('Content-Type');
+                const contentType = response.headers.get('Content-Type');
 
-        if (contentType.includes('application/vnd')) {
-          // Es un archivo (Excel)
-          // Antes de descargar, intentamos mostrar el SQL si viene en cabecera o JSON previo
-          const sqlHeader = response.headers.get('X-SQL-Query');
-          if (sqlHeader) {
-            sqlDiv.innerText = "Consulta SQL generada: " + sqlHeader;
-          }
-          const blob = await response.blob();
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'resultado.xlsx';
-          link.click();
-          resultadoDiv.innerText = "Archivo descargado: resultado.xlsx";
-        } else {
-          // Es JSON (respuesta del chat)
-          const data = await response.json();
-          resultadoDiv.innerText = data.response || "Consulta ejecutada correctamente.";
-          if (data.query) {
-            sqlDiv.innerText = "Consulta SQL generada: " + data.query;
-          }
+                if (contentType && (contentType.includes('application/vnd') || contentType.includes('octet-stream'))) {
+                    // Mostrar SQL si viene en cabecera
+                    const sqlHeader = response.headers.get('X-SQL-Query');
+                    if (sqlHeader) {
+                        sqlDiv.innerText = "Consulta SQL generada: " + sqlHeader;
+                    }
+                    // Descargar archivo
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'resultado.xlsx';
+                    link.click();
+                    respuestaDiv.innerText = "Archivo descargado: resultado.xlsx";
+                } else {
+                    // Mostrar respuesta del chat
+                    const data = await response.json();
+                    respuestaDiv.innerText = data.response || "Consulta ejecutada correctamente.";
+                    if (data.query) {
+                        sqlDiv.innerText = "Consulta SQL generada: " + data.query;
+                    }
+                }
+            } catch (error) {
+                respuestaDiv.innerText = "Error: " + error.message;
+            }
         }
-      } catch (error) {
-        resultadoDiv.innerText = "Error: " + error.message;
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
