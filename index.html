@@ -66,10 +66,14 @@
                 } else {
                     // Mostrar respuesta del chat
                     const data = await response.json();
-                    respuestaDiv.innerText = data.response || "Consulta ejecutada correctamente.";
-                    if (data.query) {
-                        sqlDiv.innerText = "Consulta SQL generada: " + data.query;
-                    }
+                        if (data.response === "NO_APLICA") {
+                            respuestaDiv.innerText = "Este tema no está dentro del alcance del reporteador.";
+                        } else {
+                            respuestaDiv.innerText = data.response || "Consulta ejecutada correctamente.";
+                        }
+                        if (data.query) {
+                            sqlDiv.innerText = "Consulta SQL generada: " + data.query;
+                        }
                 }
             } catch (error) {
                 respuestaDiv.innerText = "Error: " + error.message;
@@ -78,3 +82,4 @@
     </script>
 </body>
 </html>
+
