@@ -32,7 +32,7 @@
     </div>
 
     <script>
-        const webhookURL = 'https://repodinamk.up.railway.app/webhook-test/RepDin'; // Cambia por tu URL real
+        const webhookURL = 'https://TU_WEBHOOK_URL'; // Cambia por tu URL real
 
         async function enviarAn8n() {
             const peticion = document.getElementById('userInput').value.trim();
@@ -54,22 +54,28 @@
                     body: JSON.stringify({ peticionUsuario: peticion })
                 });
 
-                const contentType = response.headers.get('Content-Type');
+                const contentType = response.headers.get('Content-Type') || '';
 
-                if (contentType && (contentType.includes('application/vnd') || contentType.includes('octet-stream'))) {
+                if (contentType.includes('application/vnd') || contentType.includes('octet-stream')) {
                     // Mostrar SQL si viene en cabecera
                     const sqlHeader = response.headers.get('X-SQL-Query');
                     if (sqlHeader) {
                         sqlElement.textContent = "Consulta SQL generada: " + sqlHeader;
                     }
+
                     // Descargar archivo
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = 'resultado.xlsx';
+
+                    // Usa el nombre del header si existe
+                    const disposition = response.headers.get('Content-Disposition');
+                    const match = disposition && disposition.match(/filename="?(.+?)"?$/);
+                    link.download = match ? match[1] : 'resultado.xlsx';
+
                     link.click();
-                    respuestaElement.textContent = "Archivo descargado: resultado.xlsx";
+                    respuestaElement.textContent = "Archivo descargado: " + link.download;
                 } else {
                     const data = await response.json();
                     if (data.response === "NO_APLICA") {
@@ -88,4 +94,3 @@
     </script>
 </body>
 </html>
-
